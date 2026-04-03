@@ -9,6 +9,12 @@ import { DocumentSlot } from '@/document'
 export class HoverDocumentGenerator {
   static instance: HoverDocumentGenerator
 
+  /** 防止名称在表格单元格内换行，并用全角空格撑宽列 */
+  private padName(name: string): string {
+    const noBreak = name.replace(/-/g, '\u2011').replace(/\//g, '\u2060/\u2060')
+    return noBreak + '&emsp;&emsp;'
+  }
+
   /**
    * 生成属性文档表格
    *
@@ -33,19 +39,19 @@ export class HoverDocumentGenerator {
         markdownString.appendMarkdown(`### ${tag} Attributes \r`)
         markdownString.appendMarkdown('| Attributes | Description | Type | Accepted Values | Default |\r')
       }
-      markdownString.appendMarkdown('|---|---|:-:|---|:-:|\r')
+      markdownString.appendMarkdown('|---|---|---|---|---|\r')
     }
     if (attribute.length === 0) {
       // 属性 和标签一样 显示全部
       attributes.forEach((row: DocumentAttribute) => {
-        markdownString.appendMarkdown(`|${row.name}|${row.description}|${row.type}|${row.value}|${row.default}|\r`)
+        markdownString.appendMarkdown(`|${this.padName(row.name)}|${row.description}|${this.padName(row.type)}|${row.value}|${this.padName(row.default)}|\r`)
         isUndefined = false
       })
     } else {
       // 属性和标签不一样 显示标签下的某个属性的信息
       const row = attributes.find((row: DocumentAttribute) => row.name === attribute)
       if (row) {
-        markdownString.appendMarkdown(`|${row.name}|${row.description}|${row.type}|${row.value}|${row.default}|\r`)
+        markdownString.appendMarkdown(`|${this.padName(row.name)}|${row.description}|${this.padName(row.type)}|${row.value}|${this.padName(row.default)}|\r`)
         isUndefined = false
       }
     }
@@ -78,19 +84,19 @@ export class HoverDocumentGenerator {
         markdownString.appendMarkdown(`### ${tag} Method\r`)
         markdownString.appendMarkdown('| Method | Description | Parameters |\r')
       }
-      markdownString.appendMarkdown('|---|---|:-:|\r')
+      markdownString.appendMarkdown('|---|---|---|\r')
     }
     if (attribute.length === 0) {
       // 属性 和标签一样 显示全部
       methods.forEach((row: DocumentMethod) => {
-        markdownString.appendMarkdown(`|${row.name}|${row.description}|${row.parameter}|\r`)
+        markdownString.appendMarkdown(`|${this.padName(row.name)}|${row.description}|${row.parameter}|\r`)
         isUndefined = false
       })
     } else {
       // 属性和标签不一样 显示标签下的某个属性的信息
       const row = methods.find((row: DocumentMethod) => row.name === attribute)
       if (row) {
-        markdownString.appendMarkdown(`|${row.name}|${row.description}|${row.parameter}|\r`)
+        markdownString.appendMarkdown(`|${this.padName(row.name)}|${row.description}|${row.parameter}|\r`)
         isUndefined = false
       }
     }
@@ -123,19 +129,19 @@ export class HoverDocumentGenerator {
         markdownString.appendMarkdown(`### ${tag} Event\r`)
         markdownString.appendMarkdown('| Event | Description | Parameters |\r')
       }
-      markdownString.appendMarkdown('|---|---|:-:|\r')
+      markdownString.appendMarkdown('|---|---|---|\r')
     }
     if (attribute.length === 0) {
       // 属性 和标签一样 显示全部
       events.forEach((row: DocumentMethod) => {
-        markdownString.appendMarkdown(`|${row.name}|${row.description}|${row.parameter}|\r`)
+        markdownString.appendMarkdown(`|${this.padName(row.name)}|${row.description}|${row.parameter}|\r`)
         isUndefined = false
       })
     } else {
       // 属性和标签不一样 显示标签下的某个属性的信息
       const row = events.find((row: DocumentMethod) => row.name === attribute)
       if (row) {
-        markdownString.appendMarkdown(`|${row.name}|${row.description}|${row.parameter}|\r`)
+        markdownString.appendMarkdown(`|${this.padName(row.name)}|${row.description}|${row.parameter}|\r`)
         isUndefined = false
       }
     }
@@ -173,14 +179,14 @@ export class HoverDocumentGenerator {
     if (attribute.length === 0) {
       // 属性 和标签一样 显示全部
       slots.forEach((row: DocumentSlot) => {
-        markdownString.appendMarkdown(`|${row.name}|${row.description}|\r`)
+        markdownString.appendMarkdown(`|${this.padName(row.name)}|${row.description}|\r`)
         isUndefined = false
       })
     } else {
       // 属性和标签不一样 显示标签下的某个属性的信息
       const row = slots.find((row: DocumentSlot) => row.name === attribute)
       if (row) {
-        markdownString.appendMarkdown(`|${row.name}|${row.description}|\r`)
+        markdownString.appendMarkdown(`|${this.padName(row.name)}|${row.description}|\r`)
         isUndefined = false
       }
     }
@@ -218,14 +224,14 @@ export class HoverDocumentGenerator {
     if (attribute.length === 0) {
       // 属性 和标签一样 显示全部
       scopedSlots.forEach((row: DocumentScopedSlot) => {
-        markdownString.appendMarkdown(`|${row.name}|${row.description}|\r`)
+        markdownString.appendMarkdown(`|${this.padName(row.name)}|${row.description}|\r`)
         isUndefined = false
       })
     } else {
       // 属性和标签不一样 显示标签下的某个属性的信息
       const row = scopedSlots.find((row: DocumentScopedSlot) => row.name === attribute)
       if (row) {
-        markdownString.appendMarkdown(`|${row.name}|${row.description}|\r`)
+        markdownString.appendMarkdown(`|${this.padName(row.name)}|${row.description}|\r`)
         isUndefined = false
       }
     }

@@ -28,6 +28,8 @@ export default [
           include: ['src/**/*'],
           exclude: ['node_modules']
         },
+        include: ['**/*.ts', '**/*.tsx'],
+        exclude: ['**/*.d.ts'],
         abortOnError: false
       })
     ], // 插件
